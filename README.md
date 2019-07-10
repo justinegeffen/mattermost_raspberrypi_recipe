@@ -22,7 +22,7 @@ Before you install Mattermost, you need to set up MySQL. The full instructions a
 5. Add the MySQL repo MySQL
 `sudo apt-get install mysql-server`.
 
-**Note: During the install, you’ll be prompted to create a password for the MySQL root user. Make a note of the password because you’ll need it in the next step.**
+**Note:** During the install, you’ll be prompted to create a password for the MySQL root user. Make a note of the password because you’ll need it in the next step.
 
 6. Log in to MySQL as root
 `sudo mysql -u root -p` 
@@ -46,8 +46,7 @@ During this process I encountered an issue where I wasn’t prompted to choose a
 
 When that’s done, you install Mattermost server as follows: 
 1. Log in to the server that will host Mattermost Server and open a terminal window.
-2. Download the latest version of the Mattermost Server. In the following command, replace X.X.X with the version that you want to download: `wget https://releases.mattermost.com/X.X.X/mattermost-X.X.X-linux-amd64.tar.gz`.
-3. Extract the Mattermost Server files.
+2. Extract the Mattermost Server files from the .tar.gz file downloaded at the start of this process.
 `tar -xvzf mattermost*.gz`
 4. Move the extracted file to the /opt directory.
 `sudo mv mattermost /opt`
