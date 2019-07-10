@@ -6,7 +6,7 @@ I want to install Mattermost on my Raspberry Pi for use on my network.
 
 ## Solution
 
-The Raspberry Pi architecture is not officially supported by Mattermost, but there is an excellent resource available with current downloadable builds. I found it on `Mattermost on a Rasperry Pi <https://kartoffelsalat.ddns.net/post/mattermost-raspi>`__ and navigated over to https://github.com/SmartHoneybee/ubiquitous-memory/releases. The builds are updated regularly, so the most recent version is available. There are installers for quite a few flavors of Linux. The version I used was the Linux-arm-tar.gz. as that’s the flavor I have running on my Pi. You can check this by running uname -r or if you installed it yourself you’d probably already know. 
+The Raspberry Pi architecture is not officially supported by Mattermost, but there is an excellent resource available with current downloadable builds. I found it on Mattermost on a Rasperry Pi <https://kartoffelsalat.ddns.net/post/mattermost-raspi/>`__ and navigated over to https://github.com/SmartHoneybee/ubiquitous-memory/releases. The builds are updated regularly, so the most recent version is available. There are installers for quite a few flavors of Linux. The version I used was the Linux-arm-tar.gz. as that’s the flavor I have running on my Pi. You can check this by running uname -r or if you installed it yourself you’d probably already know. 
 
 Before you install Mattermost, follow the instructions on this page to set up MySQL: https://docs.mattermost.com/install/install-debian.html. You can choose to use PostGres or MySQL. I used MySQL so I followed these steps: 
 Log into the server that will host the database, and open a terminal window.
