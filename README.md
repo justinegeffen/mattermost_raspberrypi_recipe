@@ -23,7 +23,7 @@ Before you install Mattermost, you need to set up MySQL. The full instructions a
 6. Log in to MySQL as root: ```sudo mysql -u root -p```. When prompted, enter the root password that you created when installing MySQL.
 7. Create the Mattermost user "mmuser": ```mysql> create user 'mmuser'@'%' identified by 'mmuser-password';``` where "mmuser-password" is the password you plan to use. 
 
-The ‘%’ means that 'mmuser' can connect from any machine on the network. However, it’s more secure to use the IP address of the machine that hosts Mattermost. For example, if you install Mattermost on the machine with IP address 10.10.10.2, then use the following command: ```mysql> create user 'mmuser'@'10.10.10.2' identified by 'mmuser-password';```.
+The ‘%’ means that "mmuser" can connect from any machine on the network. However, it’s more secure to use the IP address of the machine that hosts Mattermost. For example, if you install Mattermost on the machine with IP address 10.10.10.2, then use the following command: ```mysql> create user 'mmuser'@'10.10.10.2' identified by 'mmuser-password';```.
 
 8. Create the Mattermost database: ```mysql> create database mattermost;```
 9. Grant access privileges to the user "mmuser": ```mysql> grant all privileges on mattermost.* to 'mmuser'@'%';```
@@ -31,7 +31,8 @@ The ‘%’ means that 'mmuser' can connect from any machine on the network. How
 
 During this process I encountered an issue where I wasn’t prompted to choose a MySQL root password so I couldn’t log in as root. While you may not encounter that, I found some handy steps at [How to set, change, and recover a MySQL root password] (https://www.techrepublic.com/article/how-to-set-change-and-recover-a-mysql-root-password/). Once you’ve set the password, make sure you run ```sudo mysql -root -p``` otherwise you’ll hit a permissions error for localhost.
 
-When that’s done, you install Mattermost server as follows: 
+Install Mattermost Server
+--------------------------
 1. Log in to the server that will host Mattermost Server and open a terminal window.
 2. Extract the Mattermost Server files from the *.tar.gz* file downloaded at the start of this process: ```tar -xvzf mattermost*.gz```
 4. Move the extracted file to the */opt* directory: ```sudo mv mattermost /opt```
@@ -57,18 +58,17 @@ When the server starts, it shows some log information and the text server is lis
 
 Set up Mattermost to Use systemd for Starting and Stopping.
 ---------------------------------------------------------
-Create a systemd unit file:
-sudo touch /lib/systemd/system/mattermost.service
-Open the unit file as root in a text editor, and copy the following lines into the file:
-[Unit]
+1. Create a systemd unit file: ```sudo touch /lib/systemd/system/mattermost.service```
+2. Open the unit file as root in a text editor, and copy the following lines into the file:
+```[Unit]
 Description=Mattermost
 After=network.target
 After=mysql.service
-Requires=mysql.service
+Requires=mysql.service```
 
 **Note:** If you are using PostgreSQL, replace *mysql.service* with *postgresql.service*. If you have installed MySQL or PostgreSQL on a dedicated server then you need to remove the After=postgresql.service and Requires=postgresql.service or After=mysql.service and Requires=mysql.service lines in the [Unit] section or the Mattermost service will not start.
 
-[Service]
+```[Service]
 Type=notify
 ExecStart=/opt/mattermost/bin/mattermost
 TimeoutStartSec=3600
@@ -80,34 +80,28 @@ Group=mattermost
 LimitNOFILE=49152
 
 [Install]
-WantedBy=multi-user.target
-Note
+WantedBy=multi-user.target```
 
-
-Make systemd load the new unit: ```sudo systemctl daemon-reload```
-Check to make sure that the unit was loaded: ```sudo systemctl status mattermost.service```
+3. Make systemd load the new unit: ```sudo systemctl daemon-reload```
+4. Check to make sure that the unit was loaded: ```sudo systemctl status mattermost.service```
 
 You should see an output similar to the following:
 
 ● mattermost.service - Mattermost
   Loaded: loaded (/lib/systemd/system/mattermost.service; disabled; vendor preset: enabled)
   Active: inactive (dead)
-Start the service.
-sudo systemctl start mattermost.service
-Verify that Mattermost is running.
-curl http://localhost:8065
 
-You should see the HTML that’s returned by the Mattermost server.
+5. Start the service: ```sudo systemctl start mattermost.service```
+6. Verify that Mattermost is running: ```curl http://localhost:8065```
+7. Set Mattermost to start on machine start up: ```sudo systemctl enable mattermost.service```
 
-Set Mattermost to start on machine start up.
-sudo systemctl enable mattermost.service
-Now that the Mattermost server is up and running, you can do some initial configuration and setup.
+You should see the HTML that’s returned by the Mattermost server. You can now log into the Mattermost server using the IP address you listed in the config.json file. The next steps I followed were to log into the server and send the team invite out so members could join my server. 
 
-Now that you’re all logged in and set up, you should be able to log into the server using the IP address you listed in the config.json file.
-  
 ## Discussion
 
 The process I used was pretty manual and, if I wanted to deploy multiple Pis in my network, I’d need to repeat the process step by step. The solution to this is to use a Docker image. The reason I didn’t use a Docker image is that Docker is far more resource-intensive to use and on a Pi you want to run something as light as possible. A second reason is that creating a Docker image requires Docker knowledge and that learning curve is a bit steeper than simply following the steps provided. 
 However, it is a better solution should you wish to deploy Mattermost across multiple Pis. 
+
+This setup was done on my local network, which meant that my users couldn't join the server when they were out of range. I worked around this by providing them with my DNS server name, which they used instead of the IP address. This allows it to resolve and join the server regardless of whether they're on my home network or not. 
 
   
