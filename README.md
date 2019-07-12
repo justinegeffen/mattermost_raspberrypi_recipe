@@ -96,10 +96,10 @@ sudo chmod -R g+w /opt/mattermost
 ```
 4. Set up the database driver in the file */opt/mattermost/config/config.json*. Open the file in a text editor and make the following changes:
     1. Set "DriverName" to "mysql"
-    2. Set "DataSource" to the following value, replacing <mmuser-password> and <host-name-or-IP> with the appropriate values. Also make sure that the database name is "mattermost" instead of "mattermost_test"
- ```bash
-    "mmuser:<mmuser-password>@tcp(<host-name-or-IP>:3306)/mattermost?charset=utf8mb4,utf8&readTimeout=30s&writeTimeout=30s"
-    ```
+    2. Set "DataSource" to the following value, replacing <mmuser-password> and <host-name-or-IP> with the appropriate values. 
+    
+  Also make sure that the database name is "mattermost" instead of "mattermost_test"
+ ```"mmuser:<mmuser-password>@tcp(<host-name-or-IP>:3306)/mattermost?charset=utf8mb4,utf8&readTimeout=30s&writeTimeout=30s"```
     
 Test the Mattermost Server 
 ---------------------------
