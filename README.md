@@ -10,6 +10,8 @@ The Raspberry Pi architecture is not officially supported by Mattermost, but the
 
 The builds are updated regularly, so the most recent version of Mattermost (5.21) is available. There are installers for quite a few flavors of Linux. The version I used was the **Linux-arm-tar.gz** as that’s the flavor I have running on my Pi. You can check this by running *uname --kernel-name --kernel-release" --machine*. If your Pi is out the box, the results should be something like **Linux 4.14.34-v7+ arm71**. If you've installed a different flavor of Linux, it'll be different so choose the appropriate install file.  
 
+Setting up MySQL
+----------------
 Before you install Mattermost, you need to set up MySQL. The full instructions are on the [Installing Mattermost on Debian Stretch](https://docs.mattermost.com/install/install-debian.html/) page and cover PostgreSQL and MySQL. I use MySQL, so these are the steps I followed: 
 
 1. Log into the server that will host the database, and open a terminal window.
@@ -64,7 +66,8 @@ Set up Mattermost to Use systemd for Starting and Stopping.
 Description=Mattermost
 After=network.target
 After=mysql.service
-Requires=mysql.service```
+Requires=mysql.service
+```
 
 **Note:** If you are using PostgreSQL, replace *mysql.service* with *postgresql.service*. If you have installed MySQL or PostgreSQL on a dedicated server then you need to remove the After=postgresql.service and Requires=postgresql.service or After=mysql.service and Requires=mysql.service lines in the [Unit] section or the Mattermost service will not start.
 
@@ -80,22 +83,34 @@ Group=mattermost
 LimitNOFILE=49152
 
 [Install]
-WantedBy=multi-user.target```
+WantedBy=multi-user.target
+```
 
 3. Make systemd load the new unit: ```sudo systemctl daemon-reload```
 4. Check to make sure that the unit was loaded: ```sudo systemctl status mattermost.service```
 
 You should see an output similar to the following:
 
-● mattermost.service - Mattermost
-  Loaded: loaded (/lib/systemd/system/mattermost.service; disabled; vendor preset: enabled)
+mattermost.service - Mattermost
+```Loaded: loaded (/lib/systemd/system/mattermost.service; disabled; vendor preset: enabled)
   Active: inactive (dead)
+ ```
 
 5. Start the service: ```sudo systemctl start mattermost.service```
 6. Verify that Mattermost is running: ```curl http://localhost:8065```
 7. Set Mattermost to start on machine start up: ```sudo systemctl enable mattermost.service```
 
-You should see the HTML that’s returned by the Mattermost server. You can now log into the Mattermost server using the IP address you listed in the config.json file. The next steps I followed were to log into the server and send the team invite out so members could join my server. 
+You should see the HTML that’s returned by the Mattermost server. 
+
+Inviting Team Members
+---------------------
+The last step in the process was to make my Mattermost server available on the network. Once everything is running, you can log into the Mattermost server using the IP address you listed in the config.json file. 
+
+<create server, invite people> 
+
+Configuration and Settings
+--------------------------
+Once everything is up and running, take a look at the Mattermost documentation for advanced configuration and settings. 
 
 ## Discussion
 
