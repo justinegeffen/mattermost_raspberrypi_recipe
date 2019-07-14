@@ -109,7 +109,7 @@ sudo chmod -R g+w /opt/mattermost
     2. Set "DataSource" to the following value, replacing <mmuser-password> and <host-name-or-IP> with the appropriate values. 
     
  ```bash
- mmuser:<your-password>@tcp(<localhost>:3306)/mattermost?charset=utf8mb4,utf8&readTimeout=30s&writeTimeout=30s
+ mmuser:mmuser-password@tcp(localhost:3306)/mattermost?charset=utf8mb4,utf8&readTimeout=30s&writeTimeout=30s
  ```
  
     
@@ -123,7 +123,7 @@ cd /opt/mattermost
 ```bash
 sudo -u mattermost ./bin/mattermost
 ```
-3. To test that you can access the server, navigate to ```<your-IP-address>:8065```. 
+3. To test that you can access the server, navigate to ```http://<your-IP-address>:8065```. 
 
 When the server starts the output log generates information, including the current version of Mattermost and the listening port (8065). You can stop the server by pressing CTRL+C on your keyboard. 
 
