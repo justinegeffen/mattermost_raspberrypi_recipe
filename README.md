@@ -92,21 +92,21 @@ The storage directory will contain all the files and images that your users post
 
 Set up a system user and group called "mattermost" that will run this service, and set the ownership and permissions.
 
-6. Create the Mattermost user and group 
+5. Create the Mattermost user and group 
 ```bash 
 sudo useradd --system --user-group mattermost
 ```
-7. Set the user and group mattermost as the owner of the Mattermost files
+6. Set the user and group mattermost as the owner of the Mattermost files
 ```bash 
 sudo chown -R mattermost:mattermost /opt/mattermost
 ```
-8. Give write permissions to the mattermost group 
+7. Give write permissions to the mattermost group 
 ```bash 
 sudo chmod -R g+w /opt/mattermost
 ```
-9. Set up the database driver in the file */opt/mattermost/config/config.json*. Open the file in a text editor and make the following changes:
-    1. Set "DriverName" to "mysql"
-    2. Set "DataSource" to the following value, replacing <mmuser-password> and <host-name-or-IP> with the appropriate values. 
+8. Set up the database driver in the file */opt/mattermost/config/config.json*. Open the file in a text editor and make the following changes:
+    1. Set ```DriverName``` to ```mysql```
+    2. Set ```DataSource``` to the following value, replacing <mmuser-password> and <host-name-or-IP> with the appropriate values. 
     
  ```bash
  mmuser:mmuser-password@tcp(localhost:3306)/mattermost?charset=utf8mb4,utf8&readTimeout=30s&writeTimeout=30s
@@ -123,7 +123,7 @@ cd /opt/mattermost
 ```bash
 sudo -u mattermost ./bin/mattermost
 ```
-3. To test that you can access the server, navigate to ```http://<your-IP-address>:8065```. 
+3. To test that you can access the server, navigate to ```http://<your-IP-address>:8065```
 
 When the server starts the output log generates information, including the current version of Mattermost and the listening port (8065). You can stop the server by pressing CTRL+C on your keyboard. 
 
