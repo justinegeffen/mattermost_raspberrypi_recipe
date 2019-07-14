@@ -8,7 +8,7 @@ I want to install Mattermost on my Raspberry Pi for use on my network.
 
 The Raspberry Pi architecture is not officially supported by Mattermost, but there is an excellent resource available with steps and helpful links [Mattermost on Raspberry Pi](https://kartoffelsalat.ddns.net/post/mattermost-raspi/), which further linked me to a really great repo with the latest install files provided by [SmartHoneyBee](https://github.com/SmartHoneybee/ubiquitous-memory/releases/). 
 
-The builds are updated regularly, so the most recent version of Mattermost (5.21) is available. There are installers for quite a few flavors of Linux. The version I used was **Linux-arm-tar.gz** as I'm running Raspbian 9 (stretch) on my Raspberry Pi 3 Model B which has an ARM Cortex-A53 processor. You can check this by running *uname --kernel-name --kernel-release" --machine*. If your Pi is out the box, the results should be something like **Linux 4.14.34-v7+ arm71**. If you've installed a different flavor of Linux, it'll be different so choose the appropriate install file.  
+The builds are updated regularly, so the most recent version of Mattermost (5.21) is available. There are installers for quite a few flavors of Linux. The version I used was **Linux-arm-tar.gz** as I'm running Raspbian 9 (stretch) on my Raspberry Pi 3 Model B which has an ARM Cortex-A53 processor. You can check this by running *uname --kernel-name --kernel-release --machine*. If your Pi is out the box, the results should be something like **Linux 4.14.34-v7+ arm71**. If you've installed a different flavor of Linux, it'll be different so choose the appropriate install file.  
 
 Setting up MySQL
 ----------------
@@ -90,26 +90,26 @@ sudo mkdir /opt/mattermost/data
 ```
 The storage directory will contain all the files and images that your users post to Mattermost, so you need to make sure that the drive is large enough to hold the anticipated number of uploaded files and images.
 
+Set up a system user and group called "mattermost" that will run this service, and set the ownership and permissions.
 
-5. Set up a system user and group called "mattermost" that will run this service, and set the ownership and permissions.
-    - Create the Mattermost user and group 
+6. Create the Mattermost user and group 
 ```bash 
 sudo useradd --system --user-group mattermost
 ```
-   - Set the user and group mattermost as the owner of the Mattermost files
+7. Set the user and group mattermost as the owner of the Mattermost files
 ```bash 
 sudo chown -R mattermost:mattermost /opt/mattermost
 ```
-   - Give write permissions to the mattermost group 
+8. Give write permissions to the mattermost group 
 ```bash 
 sudo chmod -R g+w /opt/mattermost
 ```
-   - Set up the database driver in the file */opt/mattermost/config/config.json*. Open the file in a text editor and make the following changes:
+9. Set up the database driver in the file */opt/mattermost/config/config.json*. Open the file in a text editor and make the following changes:
     1. Set "DriverName" to "mysql"
     2. Set "DataSource" to the following value, replacing <mmuser-password> and <host-name-or-IP> with the appropriate values. 
     
  ```bash
- mmuser:<mmuser-password>@tcp(<host-name-or-IP>:3306)/mattermost?charset=utf8mb4,utf8&readTimeout=30s&writeTimeout=30s
+ mmuser:<your-password>@tcp(<localhost>:3306)/mattermost?charset=utf8mb4,utf8&readTimeout=30s&writeTimeout=30s
  ```
  
     
@@ -213,4 +213,4 @@ The last step in the process is to make the Mattermost server available to team 
 If I wanted to deploy multiple Mattermost Pi appliances, I’d need to repeat this process step-by-step multiple times. One solution to this is to use a Docker image. For this recipe I didn’t use a Docker image as Docker is far more resource-intensive to use and on a Pi you generally want to run something as light as possible. A second reason is that creating a Docker image requires Docker knowledge and that learning curve is a bit steeper than simply following the steps provided. 
 However, it is a better solution should you wish to deploy Mattermost across multiple Pis. 
 
-This setup was done on my local network, which meant that my users couldn't join the server when they were off my network. I worked around this by by forwarding port 8065 to my Pi in my router settings and providing them with my DNS host name instead of the IP address. 
+This setup was done on my local network, which meant that my users couldn't join the server when they were off my network. To let users join externally I forwarded port 8065 to my Pi in my router settings and provided them with my DNS host name instead of the IP address. 
