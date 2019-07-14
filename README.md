@@ -92,23 +92,26 @@ The storage directory will contain all the files and images that your users post
 
 
 5. Set up a system user and group called "mattermost" that will run this service, and set the ownership and permissions.
-    1. Create the Mattermost user and group 
+    - Create the Mattermost user and group 
 ```bash 
 sudo useradd --system --user-group mattermost
 ```
-   2. Set the user and group mattermost as the owner of the Mattermost files
+   - Set the user and group mattermost as the owner of the Mattermost files
 ```bash 
 sudo chown -R mattermost:mattermost /opt/mattermost
 ```
-   3. Give write permissions to the mattermost group 
+   - Give write permissions to the mattermost group 
 ```bash 
 sudo chmod -R g+w /opt/mattermost
 ```
-   4. Set up the database driver in the file */opt/mattermost/config/config.json*. Open the file in a text editor and make the following changes:
+   - Set up the database driver in the file */opt/mattermost/config/config.json*. Open the file in a text editor and make the following changes:
     1. Set "DriverName" to "mysql"
     2. Set "DataSource" to the following value, replacing <mmuser-password> and <host-name-or-IP> with the appropriate values. 
     
- ```mmuser:<mmuser-password>@tcp(<host-name-or-IP>:3306)/mattermost?charset=utf8mb4,utf8&readTimeout=30s&writeTimeout=30s```
+ ```bash
+ mmuser:<mmuser-password>@tcp(<host-name-or-IP>:3306)/mattermost?charset=utf8mb4,utf8&readTimeout=30s&writeTimeout=30s
+ ```
+ 
     
 Start the Mattermost Server 
 ---------------------------
@@ -123,6 +126,7 @@ sudo -u mattermost ./bin/mattermost
 3. To test that you can access the server, navigate to ```<your-IP-address>:8065```. 
 
 When the server starts the output log generates information, including the current version of Mattermost and the listening port (8065). You can stop the server by pressing CTRL+C on your keyboard. 
+
 
 Set up Mattermost to Use systemd for Starting and Stopping.
 ---------------------------------------------------------
@@ -161,6 +165,7 @@ WantedBy=multi-user.target
 ```bash 
 sudo systemctl daemon-reload
 ```
+
 4. Check to make sure that the unit was loaded
 ```bash
 sudo systemctl status mattermost.service
@@ -178,15 +183,18 @@ Active: inactive (dead)
 ```bash
 sudo systemctl start mattermost.service
 ```
+
 6. Verify that Mattermost is running 
 ```bash
 curl http://localhost:8065
 ```
+
 You should see the HTML that’s returned by the Mattermost server. In my case it was a message referring to a connection error, which was a bit confusing. So I re-checked the service status by running 
 ```bash
 sudo systemctl status mattermost.service
 ``` 
 and confirmed that the service was active. 
+
 
 7. Finally, set Mattermost to start on boot
 ```bash
