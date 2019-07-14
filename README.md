@@ -64,7 +64,7 @@ mysql> grant all privileges on mattermost.* to 'mmuser'@'%';
 mysql> exit
 ```
 
-During this process I encountered an issue where I wasn’t prompted to choose a MySQL root password so I couldn’t log in as root. While you may not encounter that, I found some handy steps at [How to set, change, and recover a MySQL root password] (https://www.techrepublic.com/article/how-to-set-change-and-recover-a-mysql-root-password/). 
+During this process I encountered an issue where I wasn’t prompted to choose a MySQL root password so I couldn’t log in as root. While you may not encounter that, I found some handy steps at [How to set, change, and recover a MySQL root password](https://www.techrepublic.com/article/how-to-set-change-and-recover-a-mysql-root-password/). 
 
 Install Mattermost Server
 --------------------------
