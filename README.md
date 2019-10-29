@@ -137,7 +137,8 @@ If you want your Mattermost server to start up automatically on boot, you can cr
 sudo touch /lib/systemd/system/mattermost.service
 ```
 2. Open the unit file as root in a text editor, and copy the following lines into the file:
-```[Unit]
+```
+[Unit]
 Description=Mattermost
 After=network.target
 After=mysql.service
@@ -146,7 +147,8 @@ Requires=mysql.service
 
 **Note:** If you are using PostgreSQL, replace *mysql.service* with *postgresql.service*. If you have installed MySQL or PostgreSQL on a dedicated server then you need to remove the After=postgresql.service and Requires=postgresql.service or After=mysql.service and Requires=mysql.service lines in the [Unit] section or the Mattermost service will not start.
 
-```[Service]
+```
+[Service]
 Type=notify
 ExecStart=/opt/mattermost/bin/mattermost
 TimeoutStartSec=3600
