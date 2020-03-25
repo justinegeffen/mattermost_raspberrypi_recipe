@@ -8,32 +8,27 @@ I want to install Mattermost on my Raspberry Pi for use on my network.
 
 The Raspberry Pi architecture is not officially supported by Mattermost, but there is an excellent resource available with steps and helpful links [Mattermost on Raspberry Pi](https://kartoffelsalat.ddns.net/post/mattermost-raspi/), which further linked me to a really great repo with the latest install files provided by [SmartHoneyBee](https://github.com/SmartHoneybee/ubiquitous-memory/releases/). 
 
-The builds are updated regularly, so the most recent version of Mattermost (5.21) is available. There are installers for quite a few flavors of Linux. The version I used was **Linux-arm-tar.gz** as I'm running Raspbian 9 (stretch) on my Raspberry Pi 3 Model B which has an ARM Cortex-A53 processor. You can check this by running *uname --kernel-name --kernel-release --machine*. If your Pi is out the box, the results should be something like **Linux 4.14.34-v7+ arm71**. If you've installed a different flavor of Linux, it'll be different so choose the appropriate install file.  
+The builds are updated regularly, so the most recent version of Mattermost (5.21) is available. There are installers for quite a few flavors of Linux. The version I used was **Linux-arm-tar.gz** as I'm running Raspbian 10 (buster) on my Raspberry Pi 4 Model B which has an ARM. You can check this by running *uname --kernel-name --kernel-release --machine*. If your Pi is out the box, the results should be something like **Linux 4.19.97-v7l+ armv7l**. If you've installed a different flavor of Linux, it'll be different so choose the appropriate install file.  
 
-Setting up MySQL
-----------------
-Before you install Mattermost, you need to set up MySQL. The full instructions are on the [Installing Mattermost on Debian Stretch](https://docs.mattermost.com/install/install-debian.html/) page and cover PostgreSQL and MySQL. I use MySQL, so these are the steps I followed: 
+Setting up MariaDB
+------------------
+Before you install Mattermost, you need to set up MariaDB. The full instructions are on the [Installing Mattermost on Debian Stretch](https://docs.mattermost.com/install/install-debian.html/) page and cover PostgreSQL and MySQL. I use MariaDB (a drop-in replacement of MySQL), so these are the steps I followed: 
 
 1. Log into the server that will host the database, and open a terminal window.
 
-2. Download the MySQL repository package 
+2.  your local package list
 ```bash
-wget https://dev.mysql.com/get/mysql-apt-config_0.8.6-1_all.deb
+sudo apt update
 ```
 
-3. Install the repository 
+3. Install MariaDB
 ```bash
-sudo dpkg -i mysql-apt-config*
+sudo apt install mariadb-server
 ```
 
-4. Update your local package list
+4. Become the root user
 ```bash
-sudo apt-get update
-```
-
-5. Add the MySQL repo MySQL. During the install, you’ll be prompted to create a password for the MySQL root user. Make a note of the password because you’ll need it in the next step.
-```bash
-sudo apt-get install mysql-server
+sudo su -
 ```
 
 6. Log in to MySQL as root, using the root password that you created when installing MySQL.
@@ -64,14 +59,17 @@ mysql> grant all privileges on mattermost.* to 'mmuser'@'%';
 mysql> exit
 ```
 
-During this process I encountered an issue where I wasn’t prompted to choose a MySQL root password so I couldn’t log in as root. While you may not encounter that, I found some handy steps at [How to set, change, and recover a MySQL root password](https://www.techrepublic.com/article/how-to-set-change-and-recover-a-mysql-root-password/). 
+11. Drop your root privileges
+```bash
+exit
+```
 
 Install Mattermost Server
 --------------------------
 
 1. Download the appropriate install file
 ```bash
-wget https://github.com/SmartHoneybee/ubiquitous-memory/releases/download/v5.12.3/mattermost-v5.12.3-linux-arm.tar.gz
+wget https://github.com/SmartHoneybee/ubiquitous-memory/releases/download/v5.21.0/mattermost-v5.21.0-linux-arm.tar.gz
 ```
 
 2. Extract the Mattermost Server files from the *.tar.gz* file
@@ -140,11 +138,11 @@ sudo touch /lib/systemd/system/mattermost.service
 ```[Unit]
 Description=Mattermost
 After=network.target
-After=mysql.service
-Requires=mysql.service
+After=mariadb.service
+Requires=mariadb.service
 ```
 
-**Note:** If you are using PostgreSQL, replace *mysql.service* with *postgresql.service*. If you have installed MySQL or PostgreSQL on a dedicated server then you need to remove the After=postgresql.service and Requires=postgresql.service or After=mysql.service and Requires=mysql.service lines in the [Unit] section or the Mattermost service will not start.
+**Note:** If you are using PostgreSQL, replace *mariadb.service* with *postgresql.service*. If you have installed MariaDB or PostgreSQL on a dedicated server then you need to remove the After=postgresql.service and Requires=postgresql.service or After=mariadb.service and Requires=mariadb.service lines in the [Unit] section or the Mattermost service will not start.
 
 ```[Service]
 Type=notify
