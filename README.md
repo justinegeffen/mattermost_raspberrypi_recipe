@@ -1,4 +1,4 @@
-## This content was written as part of an interview process. I'm really glad it's been helpful! It's not currently being maintained or updated but you're welcome to submit changes in a PR. Thank you! 
+**This content was written as part of an interview process. I'm really glad it's been helpful! It's not currently being maintained or updated but you're welcome to submit changes in a PR. Thank you!**
 
 # Mattermost Raspberry Pi Recipe
 
